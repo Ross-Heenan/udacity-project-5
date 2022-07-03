@@ -9,8 +9,9 @@ jobs:
       - restore_cache:
           keys: [test-microservice]
       - run:
-          name: Lint Flask Microservice
+          name: Linting Flask Microservice
           command: |
+            pip install flask
             pip install pylint
             pylint microservice.py
       - save_cache:
