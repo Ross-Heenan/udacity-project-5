@@ -21,7 +21,7 @@ workflows:
   default:
     jobs:
       - build-microservice
-        filters:
-          branches:
-            only: [master]
+          filters:
+            branches:
+              only: [main]
      
