@@ -20,7 +20,7 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-microservice:
+      - test-microservice:
           filters:
             branches:
               only: [main]
