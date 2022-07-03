@@ -12,6 +12,7 @@ jobs:
           name: Linting Flask Microservice
           command: |
             apk add build-base
+            pip install flask
             pip install pylint
             pylint microservice.py
       - save_cache:
