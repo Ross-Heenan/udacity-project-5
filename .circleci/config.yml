@@ -8,16 +8,31 @@ jobs:
       - checkout
       - restore_cache:
           keys: [test-microservice]
-      - run:
-          name: Linting Flask Microservice
+      - run: 
+          name: Installing Dependencies
           command: |
             apk add build-base
             pip install flask
             pip install pylint
+      - run:
+          name: Linting Flask Microservice
+          command: |
             pylint microservice.py
       - save_cache:
           paths: [cache/test-microservice]
           key: test-microservice
+
+  create-infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Build microservice infrastructure (kuubernetes in AWS)
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/infrastructure.yml \
+              --stack-name "flask-microservice-${CIRCLE_WORKFLOW_ID:0:7}"
 
 workflows:
   default:
@@ -26,4 +41,6 @@ workflows:
           filters:
             branches:
               only: [main]
+      - create-infrastructure:
+          requires: [test-microservice]
      
