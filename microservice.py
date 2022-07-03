@@ -2,7 +2,8 @@
 This is a basic hello world flask application.
 The application will get deployed to AWS via
 instructions/jobs in a CircleCI CI/CD pipeline.
-It will act as a microservice.
+It will act as a microservice and will be
+containerised using docker and kubernetes.
 """
 from flask import Flask
 
