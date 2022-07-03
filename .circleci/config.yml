@@ -1,0 +1,27 @@
+version: 2.1
+
+jobs:
+  test-microservice:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [test-microservice]
+      - run:
+          name: Lint Flask Microservice
+          command: |
+            pip install pylint
+            pylint microservice.py
+      - save_cache:
+          paths: [cache/test-microservice]
+          key: test-microservice
+
+workflows:
+  default:
+    jobs:
+      - build-microservice
+        filters:
+          branches:
+            only: [master]
+     
