@@ -11,7 +11,7 @@ jobs:
       - run:
           name: Linting Flask Microservice
           command: |
-            pip install flask
+            pip install gcc
             pip install pylint
             pylint microservice.py
       - save_cache:
