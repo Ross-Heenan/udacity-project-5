@@ -31,9 +31,12 @@ jobs:
           version: 20.10.14
           docker_layer_caching: true
       - run:
-          name: Building Docker Image
+          name: Building and Publishing Docker Image
           command: |
             docker image build -t microservice-img .
+            docker login --username rexcode11
+            docker tag microservice-img rexcode11/udacity-5
+            docker push rexcode11/udacity-5
             
 
 workflows:
