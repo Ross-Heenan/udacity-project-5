@@ -44,7 +44,8 @@ jobs:
           name: Building Docker Image
           command: |
             sudo docker version
-            sudo systemctl start docker
+            sudo service docker status
+            sudo service docker start
             sudo docker image build -t microservice-img .
             sudo dockerpath=rexcode11/udacity-5
             sudo docker login --username rexcode11
