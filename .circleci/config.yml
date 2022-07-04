@@ -23,6 +23,8 @@ jobs:
           key: test-microservice
 
   build-image:
+    docker:
+      - image: circleci/buildpack-deps:stretch
     steps:
       - checkout
       - setup_remote_docker
