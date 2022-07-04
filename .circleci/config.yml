@@ -24,11 +24,16 @@ jobs:
 
   build-image:
     docker:
-      - image: 20.10.17-alpine3.16
+      - image: cimg/base:2021.04
     steps:
       - checkout
       - restore_cache:
           keys: [build-image]
+      - run: 
+          name: Installing Dependencies
+          command: |
+            sudo apt-get install docker
+            sudo systemctl status docker
       - run:
           name: Building Docker Image
           command: |
