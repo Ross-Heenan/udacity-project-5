@@ -44,28 +44,7 @@ jobs:
             docker push $dockerpath
       - save_cache:
           paths: [cache/build-image]
-
-  create-infrastructure:
-    docker:
-      - image: python:3.7-alpine3.11
-    steps:
-      - checkout
-      - run: 
-        name: Installing Dependencies
-        command: |
-          apk add build-base
-          curl -o kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.22.6/2022-03-09/bin/linux/amd64/kubectl
-          chmod +x ./kubectl
-          mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
-          kubectl version
-          curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-          sudo mv /tmp/eksctl /usr/local/bin
-          eksctl version
-      - run:
-          name: Build microservice infrastructure (kuubernetes in AWS)
-          command: |
-            eksctl create cluster --name my-microservice-cluster --region us-east-1 --fargate
-            
+          key: [build-image]
 
 workflows:
   default:
@@ -76,8 +55,6 @@ workflows:
               only: [main]
       - build-microservice-img:
           requires: [test-microservice]
-      - create-infrastructure:
-          requires: build-microservice-img
 
 
      
