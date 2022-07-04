@@ -28,7 +28,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [build-image]
+          keys: build-image
       - run: 
           name: Installing Dependencies
           command: |
