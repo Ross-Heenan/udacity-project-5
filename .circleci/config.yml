@@ -35,7 +35,6 @@ jobs:
       - run:
           name: Building Docker Image
           command: |
-            service start docker
             docker version
             docker image build -t microservice-img .
             dockerpath=rexcode11/udacity-5
