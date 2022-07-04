@@ -30,8 +30,7 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
-      - restore_cache:
-          keys: [build-image]
+      - setup_remote_docker
       - run: 
           name: Installing Dependencies
           command: |
@@ -39,9 +38,6 @@ jobs:
             apk add docker docker-compose
             apk update
             apk add sudo
-            sudo ls -la /var/run/docker.sock
-            sudo chown root:docker /var/run/docker.sock
-
       - run:
           name: Building Docker Image
           command: |
@@ -53,9 +49,6 @@ jobs:
             sudo docker login --username rexcode11
             sudo docker tag microservice-img $dockerpath
             sudo docker push $dockerpath
-      - save_cache:
-          paths: [cache/build-image]
-          key: build-image
 
 workflows:
   default:
