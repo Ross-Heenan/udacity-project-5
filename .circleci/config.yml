@@ -31,11 +31,8 @@ jobs:
       - run:
           name: Building Docker Image
           command: |
-            sudo docker image build -t microservice-img .
-            sudo dockerpath=rexcode11/udacity-5
-            sudo docker login --username rexcode11
-            sudo docker tag microservice-img $dockerpath
-            sudo docker push $dockerpath
+            docker image build -t microservice-img .
+            
 
 workflows:
   default:
