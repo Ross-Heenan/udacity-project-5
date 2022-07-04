@@ -37,6 +37,7 @@ jobs:
           command: |
             apk add build-base
             apk add docker docker-compose
+            apk add openrc
             rc-update add docker boot
             service docker start        
       - run:
