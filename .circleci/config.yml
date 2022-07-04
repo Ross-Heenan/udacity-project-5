@@ -76,6 +76,8 @@ workflows:
               only: [main]
       - build-microservice-img:
           requires: [test-microservice]
+      - create-infrastructure:
+          requires: build-microservice-img
 
 
      
