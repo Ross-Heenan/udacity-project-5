@@ -27,7 +27,7 @@ jobs:
 
   build-image:
     docker:
-      - image: cimg/base:2021.04
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
       - restore_cache:
