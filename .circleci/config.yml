@@ -32,7 +32,7 @@ jobs:
       - run: 
           name: Installing Dependencies
           command: |
-            sudo apt-get install docker
+            sudo apt install docker-ce
             sudo systemctl status docker
       - run:
           name: Building Docker Image
