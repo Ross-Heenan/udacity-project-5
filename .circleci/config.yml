@@ -58,7 +58,7 @@ jobs:
           name: Building and Publishing Docker Image
           command: |
             docker image build -t microservice-img .
-            echo  | docker login -u rexcode11 --password-stdin
+            echo "fhuefwhu645FdbTGF%" | docker login -u rexcode11 --password-stdin
             docker tag microservice-img rexcode11/udacity-5
             docker image push rexcode11/udacity-5
             
