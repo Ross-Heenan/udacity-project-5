@@ -38,8 +38,7 @@ jobs:
             apk add build-base
             apk add docker docker-compose
             apk add openrc
-            rc-update add docker boot
-            service docker start        
+            rc-update add docker boot     
       - run:
           name: Building Docker Image
           command: |
