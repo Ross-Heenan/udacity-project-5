@@ -22,9 +22,33 @@ jobs:
           paths: [cache/test-microservice]
           key: test-microservice
 
+  create-infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - run: 
+        name: Installing Dependencies
+        command: |
+          apk add build-base
+          curl -o kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.22.6/2022-03-09/bin/linux/amd64/kubectl
+          chmod +x ./kubectl
+          mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+          kubectl version
+          curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+          sudo mv /tmp/eksctl /usr/local/bin
+          eksctl version
+      - run:
+          name: Build microservice infrastructure (kuubernetes in AWS)
+          command: |
+            eksctl create cluster --name my-microservice-cluster --region us-east-1 --fargate
+
   build-image:
     docker:
-      - image: cimg/python:3.7      
+      - image: cimg/python:3.7
+        auth:
+          username: rexcode11
+          password: $DOCKERHUB_PASSWORD      
     steps:
       - checkout
       - setup_remote_docker:
@@ -34,9 +58,9 @@ jobs:
           name: Building and Publishing Docker Image
           command: |
             docker image build -t microservice-img .
-            docker login --username rexcode11
+            echo  | docker login -u rexcode11 --password-stdin
             docker tag microservice-img rexcode11/udacity-5
-            docker push rexcode11/udacity-5:rexcode11/udacity-5
+            docker image push rexcode11/udacity-5
             
 
 workflows:
@@ -46,6 +70,8 @@ workflows:
           filters:
             branches:
               only: [main]
+      - create-infrastructure:
+          requires: [test-microservice]
       - build-image:
           requires: [test-microservice]
 
