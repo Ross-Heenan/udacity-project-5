@@ -36,18 +36,18 @@ jobs:
           name: Installing Dependencies
           command: |
             apk add build-base
-            apk add docker docker-compose
             apk add openrc
+            apk add docker docker-compose
             rc-update add docker boot     
       - run:
           name: Building Docker Image
           command: |
-            sudo docker version
-            sudo docker image build -t microservice-img .
-            sudo dockerpath=rexcode11/udacity-5
-            sudo docker login --username rexcode11
-            sudo docker tag microservice-img $dockerpath
-            sudo docker push $dockerpath
+            docker version
+            docker image build -t microservice-img .
+            dockerpath=rexcode11/udacity-5
+            docker login --username rexcode11
+            docker tag microservice-img $dockerpath
+            docker push $dockerpath
       - save_cache:
           paths: [cache/build-image]
           key: build-image
