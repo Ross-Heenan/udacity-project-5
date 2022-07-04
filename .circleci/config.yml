@@ -24,22 +24,14 @@ jobs:
 
   build-image:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: 20.10.17-alpine3.16
     steps:
       - checkout
       - restore_cache:
           keys: [build-image]
-      - run: 
-          name: Installing Dependencies
-          command: |
-            apk add build-base
-            apk add docker
       - run:
           name: Building Docker Image
           command: |
-            docker version
-            systemctl start docker
-            dockerd
             docker image build -t microservice-img .
             dockerpath=rexcode11/udacity-5
             docker login --username rexcode11
