@@ -36,10 +36,12 @@ jobs:
           name: Installing Dependencies
           command: |
             apk add build-base
-            apk add openrc
             apk add docker docker-compose
             apk update
-            apk add sudo  
+            apk add sudo
+            sudo ls -la /var/run/docker.sock
+            sudo chown root:docker /var/run/docker.sock
+
       - run:
           name: Building Docker Image
           command: |
