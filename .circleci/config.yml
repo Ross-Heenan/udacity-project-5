@@ -29,11 +29,6 @@ jobs:
       - checkout
       - restore_cache:
           keys: [build-image]
-      - run: 
-          name: Installing Dependencies
-          command: |
-            sudo apt install docker-ce
-            sudo systemctl status docker
       - run:
           name: Building Docker Image
           command: |
