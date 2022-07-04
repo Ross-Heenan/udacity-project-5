@@ -28,7 +28,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: build-image
+          keys: [build-image]
       - run: 
           name: Installing Dependencies
           command: |
@@ -44,7 +44,7 @@ jobs:
             docker push $dockerpath
       - save_cache:
           paths: [cache/build-image]
-          key: [build-image]
+          key: build-image
 
 workflows:
   default:
