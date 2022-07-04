@@ -26,24 +26,12 @@ jobs:
           key: test-microservice
 
   build-image:
-    docker:
-      - image: python:3.7-alpine3.11
     steps:
       - checkout
       - setup_remote_docker
-      - run: 
-          name: Installing Dependencies
-          command: |
-            apk add build-base
-            apk add docker docker-compose
-            apk update
-            apk add sudo
       - run:
           name: Building Docker Image
           command: |
-            sudo docker version
-            sudo service docker status
-            sudo service docker start
             sudo docker image build -t microservice-img .
             sudo dockerpath=rexcode11/udacity-5
             sudo docker login --username rexcode11
