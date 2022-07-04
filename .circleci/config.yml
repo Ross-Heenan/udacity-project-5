@@ -39,6 +39,7 @@ jobs:
           command: |
             docker version
             systemctl start docker
+            dockerd
             docker image build -t microservice-img .
             dockerpath=rexcode11/udacity-5
             docker login --username rexcode11
