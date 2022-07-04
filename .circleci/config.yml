@@ -32,15 +32,22 @@ jobs:
       - checkout
       - restore_cache:
           keys: [build-image]
+      - run: 
+          name: Installing Dependencies
+          command: |
+            apk add build-base
+            apk add docker docker-compose
+            rc-update add docker boot
+            service docker start        
       - run:
           name: Building Docker Image
           command: |
-            docker version
-            docker image build -t microservice-img .
-            dockerpath=rexcode11/udacity-5
-            docker login --username rexcode11
-            docker tag microservice-img $dockerpath
-            docker push $dockerpath
+            sudo docker version
+            sudo docker image build -t microservice-img .
+            sudo dockerpath=rexcode11/udacity-5
+            sudo docker login --username rexcode11
+            sudo docker tag microservice-img $dockerpath
+            sudo docker push $dockerpath
       - save_cache:
           paths: [cache/build-image]
           key: build-image
