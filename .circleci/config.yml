@@ -44,8 +44,9 @@ jobs:
       - run:
           name: Build Kubernetes Cluster
           command: |
-            eksctl create cluster --name my-microservice --region us-east-1 --fargate
-
+            kubectl run python-microservice --image=YOUR_IMAGE_URL --requests=cpu=500m --expose --port=80
+            kubectl expose deployment python-microservice --type=LoadBalancer --name=microservice-endpoint
+            kubectl get services microservice-endpoint
   build-image:
     docker:
       - image: cimg/python:3.7
@@ -64,6 +65,10 @@ jobs:
             echo "$DOCKERHUB_PASS" | docker login -u rexcode11 --password-stdin
             docker tag microservice-img rexcode11/udacity-5
             docker image push rexcode11/udacity-5
+
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 478288121115.dkr.ecr.us-east-1.amazonaws.com
+            docker tag microservice-img 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
+            docker push 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
             
 
 workflows:
