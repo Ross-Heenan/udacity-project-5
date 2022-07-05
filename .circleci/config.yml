@@ -44,13 +44,14 @@ jobs:
           name: Build Kubernetes Cluster
           command: |
             eksctl create cluster \
-              --name my-microservice \
+              --name flask-microservice \
               --node-type t2.micro \
               --nodes 1 \
               --nodes-min 1 \
               --nodes-max 1 \
               --region us-east-1 \
               --kubeconfig=$HOME/demo-cluster-config.yaml
+
 
             export KUBECONFIG=$HOME/demo-cluster-config.yaml
             kubectl run python-microservice --image=478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest --expose --port=80
@@ -72,7 +73,6 @@ jobs:
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 478288121115.dkr.ecr.us-east-1.amazonaws.com
             docker tag microservice-img 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
             docker push 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
-            
 
 workflows:
   default:
@@ -81,10 +81,10 @@ workflows:
           filters:
             branches:
               only: [main]
-      - create-infrastructure:
-          requires: [test-microservice]
       - build-image:
           requires: [test-microservice]
+      - create-infrastructure:
+          requires: [build-image]
 
 
      
