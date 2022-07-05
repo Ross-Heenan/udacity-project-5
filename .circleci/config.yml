@@ -43,7 +43,7 @@ jobs:
       - run:
           name: Build Kubernetes Cluster
           command: |
-            kubectl run python-microservice --image=478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest --requests=cpu=500m --expose --port=80
+            kubectl run python-microservice --image=478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest --expose --port=80
             kubectl expose deployment python-microservice --type=LoadBalancer --name=microservice-endpoint
             kubectl get services microservice-endpoint
   build-image:
