@@ -66,6 +66,7 @@ jobs:
             docker tag microservice-img rexcode11/udacity-5
             docker image push rexcode11/udacity-5
 
+            pip install awscli
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 478288121115.dkr.ecr.us-east-1.amazonaws.com
             docker tag microservice-img 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
             docker push 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
