@@ -42,9 +42,9 @@ jobs:
             sudo mv /tmp/eksctl /usr/local/bin
             eksctl version
       - run:
-          name: Build microservice infrastructure (kuubernetes in AWS)
+          name: Build Kubernetes Cluster
           command: |
-            eksctl create cluster --name my-microservice-cluster --region us-east-1 --fargate
+            eksctl create cluster --name my-microservice --region us-east-1 --fargate
 
   build-image:
     docker:
