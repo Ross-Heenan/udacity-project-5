@@ -64,7 +64,6 @@ jobs:
             eksctl create cluster \
             --zones us-east-1a,us-east-1b,us-east-1c,us-east-1d,us-east-1f \
             --name udacity5 \ 
-            --nodegroup-name udacityNodes \
             --nodes 2 \
             --nodes-min 2 \
             --nodes-max 2 \
@@ -73,7 +72,7 @@ jobs:
       - run:
           name: Create EKS Service
           command: |
-            kubectl apply -f kubeService.yaml
+            kubectl apply -f kubeService.yml
       - run:
           name: Create EKS Deployment
           command: |
