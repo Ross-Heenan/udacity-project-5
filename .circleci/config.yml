@@ -1,6 +1,7 @@
 version: 2.1
 
 jobs:
+
   test-microservice:
     docker:
       - image: python:3.7-alpine3.11
@@ -22,6 +23,23 @@ jobs:
           paths: [cache/test-microservice]
           key: test-microservice
 
+  build-image:
+    docker:
+      - image: cimg/python:3.7    
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
+      - run:
+          name: Building and Pushing Docker Image
+          command: |
+            docker image build -t microservice-img .
+            pip install awscli
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 478288121115.dkr.ecr.us-east-1.amazonaws.com
+            docker tag microservice-img 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
+            docker push 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
+
   create-infrastructure:
     docker:
       - image: python:3.7-alpine3.11
@@ -41,31 +59,24 @@ jobs:
             sudo mv /tmp/eksctl /usr/local/bin
             eksctl version
       - run:
-          name: Build Kubernetes Cluster
+          name: Create Kubernetes Cluster
           command: |
-            eksctl create cluster
-            kubectl get pods
+            eksctl create cluster \
+            --name udacity5 \ 
+            --nodegroup-name udacityNodes \
+            --nodes 2 \
+            --nodes-min 2 \
+            --nodes-max 2 \
+            --node-type t2.micro
             export KUBECONFIG=~/.kube/config
-            kubectl run python-microservice --image=478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest --expose --port=80
-            kubectl port-forward python-microservice 80:80
-            kubectl get pods
-            
-  build-image:
-    docker:
-      - image: cimg/python:3.7    
-    steps:
-      - checkout
-      - setup_remote_docker:
-          version: 20.10.14
-          docker_layer_caching: true
       - run:
-          name: Building and Publishing Docker Image
+          name: Create EKS Service
           command: |
-            docker image build -t microservice-img .
-            pip install awscli
-            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 478288121115.dkr.ecr.us-east-1.amazonaws.com
-            docker tag microservice-img 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
-            docker push 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
+            kubectl apply -f kubeService.yaml
+      - run:
+          name: Create EKS Deployment
+          command: |
+            kubectl apply -f kubeDeploy.yml
 
 workflows:
   default:

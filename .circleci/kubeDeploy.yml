@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udacityDeployment
+spec:
+  replicas: 1
+selector:
+    matchLabels:
+    app: udacity5
+
+template: 
+    metadata:
+    name: udacityPod
+    labels: 
+        app: udacity5       
+    spec:
+    containers: # List
+        - name: udactyContainer
+        image: 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
+        ports:
+            - containerPort: 80    
