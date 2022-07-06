@@ -63,7 +63,7 @@ jobs:
           command: |
             eksctl create cluster \
             --zones us-east-1a,us-east-1b,us-east-1c,us-east-1d,us-east-1f \
-            --name udacityCapstoneProj
+            --name udacityCapstone
             export KUBECONFIG=~/.kube/config
       - run:
           name: Create EKS Deployment
@@ -92,6 +92,10 @@ jobs:
             curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
             sudo mv /tmp/eksctl /usr/local/bin
             eksctl version
+       - run: 
+          name: Installing Dependencies
+          command: |
+            eksctl delete cluster--region=us-east-1 --name=udacityCapstoneProj
        
 workflows:
   default:
