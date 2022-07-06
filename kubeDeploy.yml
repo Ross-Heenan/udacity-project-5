@@ -4,18 +4,18 @@ metadata:
   name: udacityDeployment
 spec:
   replicas: 1
-selector:
+  selector:
     matchLabels:
-    app: udacity5
+      app: udacity5
 
-template: 
+  template: 
     metadata:
-    name: udacityPod
-    labels: 
+      name: udacityPod
+      labels: 
         app: udacity5       
     spec:
-    containers:
-        - name: udactyContainer
-          image: 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
-          ports:
-          - containerPort: 80    
+      containers:
+      - name: udactyContainer
+        image: 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
+        ports:
+        - containerPort: 80    

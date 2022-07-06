@@ -40,7 +40,7 @@ jobs:
             docker tag microservice-img 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
             docker push 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
 
-  create-infrastructure:
+  create-and-deploy:
     docker:
       - image: python:3.7-alpine3.11
     steps:
@@ -74,7 +74,7 @@ jobs:
           command: |
             kubectl apply -f kubeService.yml
             
-  delete-old-stacks:
+  delete-old-stack:
     docker:
       - image: python:3.7-alpine3.11
     steps:
@@ -95,7 +95,7 @@ jobs:
       - run:
           name: Delete Kubernetes Clusters
           command: |
-            eksctl delete cluster --region=us-east-1 --name=udacityCapstoneProj
+            eksctl delete cluster --region=us-east-1 --name=udacityCapstone
        
 workflows:
   default:
@@ -104,11 +104,11 @@ workflows:
           filters:
             branches:
               only: [main]
-      - delete-old-stacks:
+      - delete-old-stack:
           requires: [test-microservice]  
       - build-image:
           requires: [test-microservice]
-      - create-infrastructure:
+      - create-and-deploy:
           requires: [build-image,delete-old-stacks]
 
 
