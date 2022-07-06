@@ -44,7 +44,8 @@ jobs:
           name: Build Kubernetes Cluster
           command: |
             eksctl create cluster
-            export KUBECONFIG=~/.kubr/config
+            kubectl get pods
+            export KUBECONFIG=~/.kube/config
             kubectl run python-microservice --image=478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest --expose --port=80
             kubectl port-forward python-microservice 80:80
             kubectl get pods
