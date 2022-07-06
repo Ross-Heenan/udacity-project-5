@@ -73,7 +73,32 @@ jobs:
           wname: Create EKS Service
           command: |
             kubectl apply -f kubeService.yml
-
+            
+  delete-old-stacks:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - run: 
+          name: Installing Dependencies
+          command: |
+            apk add build-base
+            apk add curl
+            apk add sudo
+            pip install awscli
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+            kubectl version --short --client
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+            sudo mv /tmp/eksctl /usr/local/bin
+            eksctl version
+      - run:
+          name: Delete Kubernetes Clusters
+          command: |
+            eksctl delete cluster --region=us-east-1 --name=udacityCapstone3
+            eksctl delete cluster --region=us-east-1 --name=udacityCapstone2
+            eksctl delete cluster --region=us-east-1 --name=udacityCapstone
+       
 workflows:
   default:
     jobs:
@@ -81,6 +106,8 @@ workflows:
           filters:
             branches:
               only: [main]
+      - delete-old-stacks
+          requires: [test-microservice]  
       - build-image:
           requires: [test-microservice]
       - create-infrastructure:
