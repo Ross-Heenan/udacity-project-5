@@ -73,26 +73,7 @@ jobs:
           wname: Create EKS Service
           command: |
             kubectl apply -f kubeService.yml
-            
-  delete-old-stack:
-    docker:
-      - image: python:3.7-alpine3.11
-    steps:
-      - checkout
-      - run: 
-          name: Installing Dependencies
-          command: |
-            apk add build-base
-            apk add curl
-            apk add sudo
-            pip install awscli
-            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-            kubectl version --short --client
-            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-            sudo mv /tmp/eksctl /usr/local/bin
-            eksctl version
-       
+          
 workflows:
   default:
     jobs:
@@ -100,12 +81,10 @@ workflows:
           filters:
             branches:
               only: [main]
-      - delete-old-stack:
-          requires: [test-microservice]  
       - build-image:
           requires: [test-microservice]
       - create-and-deploy:
-          requires: [build-image,delete-old-stack]
+          requires: [build-image]
 
 
      
