@@ -63,7 +63,7 @@ jobs:
           command: |
             eksctl create cluster \
             --zones us-east-1a,us-east-1b,us-east-1c,us-east-1d,us-east-1f \
-            --name udacityCapstoneProj
+            --name udacityCapstone
             export KUBECONFIG=~/.kube/config
       - run:
           name: Create EKS Deployment
@@ -95,7 +95,7 @@ jobs:
       - run:
           name: Delete Kubernetes Clusters
           command: |
-            eksctl delete cluster --region=us-east-1 --name=udacityCapstone3
+            eksctl delete cluster --region=us-east-1 --name=udacityCapstoneProj
        
 workflows:
   default:
@@ -109,7 +109,7 @@ workflows:
       - build-image:
           requires: [test-microservice]
       - create-infrastructure:
-          requires: [build-image]
+          requires: [build-image,delete-old-stacks]
 
 
      

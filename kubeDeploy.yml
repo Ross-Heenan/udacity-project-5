@@ -14,8 +14,8 @@ template:
     labels: 
         app: udacity5       
     spec:
-    containers: # List
+    containers:
         - name: udactyContainer
-        image: 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
-        ports:
-            - containerPort: 80    
+          image: 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
+          ports:
+          - containerPort: 80    
