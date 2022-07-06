@@ -95,7 +95,6 @@ jobs:
       - run:
           name: Delete Kubernetes Clusters
           command: |
-            eksctl delete cluster --region=us-east-1 --name=udacityCapstone3
             eksctl delete cluster --region=us-east-1 --name=udacityCapstone2
             eksctl delete cluster --region=us-east-1 --name=udacityCapstone
        
