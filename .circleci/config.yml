@@ -109,7 +109,7 @@ workflows:
       - build-image:
           requires: [test-microservice]
       - create-and-deploy:
-          requires: [build-image,delete-old-stacks]
+          requires: [build-image,delete-old-stack]
 
 
      
