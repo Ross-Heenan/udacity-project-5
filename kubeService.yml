@@ -1,12 +1,11 @@
 kind: Service 
 apiVersion: v1 
 metadata:
-  name: udacityservice
+  name: nginx-service-loadbalancer
 spec:
   type: LoadBalancer
   selector:
-    app: udacity5
-
+    app: nginx
   ports:
     - protocol: TCP
       port: 80

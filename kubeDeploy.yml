@@ -1,21 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: udacitydeployment
+  name: nginx-deployment
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: udacity5
+      app: nginx
 
   template: 
     metadata:
-      name: udacitypod
       labels: 
-        app: udacity5       
+        app: nginx      
     spec:
       containers:
-      - name: udactycontainer
-        image: 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
+      - name: nginx
+        image: nginx:1.14.2
         ports:
         - containerPort: 80    
