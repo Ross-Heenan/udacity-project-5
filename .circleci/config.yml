@@ -43,20 +43,12 @@ jobs:
       - run:
           name: Build Kubernetes Cluster
           command: |
-            eksctl create cluster \
-              --name flask-microservice \
-              --node-type t2.micro \
-              --nodes 1 \
-              --nodes-min 1 \
-              --nodes-max 1 \
-              --region us-east-1 \
-              --kubeconfig=$HOME/demo-cluster-config.yaml
-
-
-            export KUBECONFIG=$HOME/demo-cluster-config.yaml
+            eksctl create cluster
+            export KUBECONFIG=~/.kubr/config
             kubectl run python-microservice --image=478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest --expose --port=80
             kubectl port-forward python-microservice 80:80
             kubectl get pods
+            
   build-image:
     docker:
       - image: cimg/python:3.7    
