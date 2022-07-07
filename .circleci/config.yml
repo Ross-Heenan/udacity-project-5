@@ -91,7 +91,7 @@ jobs:
             echo "${ELB_DNS}"
             export PAGE_TITLE=$(curl -s ${ELB_DNS} | grep "title")
             echo "${PAGE_TITLE}"
-            if "${ PAGE_TITLE}" | grep "<title>Welcome to nginx!</title>"
+            if "${PAGE_TITLE}" | grep "<title>Welcome to nginx!</title>"
             then
                 return 0
             else
