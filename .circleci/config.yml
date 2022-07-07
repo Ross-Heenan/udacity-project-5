@@ -63,7 +63,7 @@ jobs:
           command: |
             eksctl create cluster \
             --zones us-east-1a,us-east-1b,us-east-1c,us-east-1d,us-east-1f \
-            --name capstoneBlueCluster
+            --name capstoneGreenCluster
             export KUBECONFIG=~/.kube/config
       - run:
           name: Create EKS Deployment
@@ -89,6 +89,7 @@ jobs:
           command: |
             export ELB_DNS=$(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName')
             export DNS=$(echo ${ELB_DNS} | tr -d '"')
+            echo "DNS"
             if curl ${DNS} | grep "title"
             then
               return 0
@@ -129,7 +130,16 @@ jobs:
 workflows:
   default:
     jobs:
-      - smoke-test
+      - test-microservice:
+          filters:
+            branches:
+             only: [main]
+      - build-image:
+          requires: [test-microservice]
+      - create-and-deploy:
+          requires: [build-image]
+      - smoke-test:
+          requires: [create-and-deploy]
       - cloudfront-update:
           type: approval
           requires: [smoke-test]

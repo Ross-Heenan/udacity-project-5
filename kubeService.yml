@@ -1,11 +1,11 @@
 kind: Service 
 apiVersion: v1 
 metadata:
-  name: nginx-blue-loadbalancer
+  name: nginx-green-loadbalancer
 spec:
   type: LoadBalancer
   selector:
-    app: nginxblue
+    app: nginxgreen
   ports:
     - protocol: TCP
       port: 80
