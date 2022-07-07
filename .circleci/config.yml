@@ -84,8 +84,9 @@ jobs:
           command: |
             apk add --update curl
             pip3 install awscli
-        - run:
+      - run:
           name: Smoke Test
+          command: |
             export DNS=$(aws elb describe-load-balancers --query 'LoadBalancers[*].DNSName' --output text)
             echo ${DNS}
             export URL="http://${DNS}}:80"        
