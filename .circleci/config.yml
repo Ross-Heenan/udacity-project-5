@@ -63,7 +63,7 @@ jobs:
           command: |
             eksctl create cluster \
             --zones us-east-1a,us-east-1b,us-east-1c,us-east-1d,us-east-1f \
-            --name udacityCapstone2
+            --name capstoneClusterBlue
             export KUBECONFIG=~/.kube/config
       - run:
           name: Create EKS Deployment
@@ -87,9 +87,41 @@ jobs:
       - run:
           name: Smoke Test
           command: |
-            export DNS=$(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName')
+            export DNS = $(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName')
             echo ${DNS}
-            if curl -s ${DNS} | grep "Welcome to nginx!"
+            export TITLE = curl -s ${DNS} | grep "title"
+            if ${TITLE} | grep "<title>Welcome to nginx!</title>"
+            then
+                return 0
+            else
+                return 1
+            fi
+  
+  update-cloudfront:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - run:
+          name: Updated Cloudfront for Green
+          command: |
+            echo "update cloudfront distribution with the green loadbalancer before approving this job"
+
+  cloudfront-smoke-test:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update curl
+            pip install awscli
+      - run:
+          name: Cloudfront Smoke Test
+          command: |
+            export TITLE = curl -s d3539l7xauj1xh.cloudfront.net | grep "title"
+            if ${TITLE} | grep "<title>Welcome to nginx!</title>"
             then
                 return 0
             else
@@ -109,6 +141,11 @@ workflows:
           requires: [build-image]
       - smoke-test:
           requires: [create-and-deploy]
+      - cloudfront-update:
+          type: approval
+          requires: [smoke-test]
+      - cloudfront-smoke-test:
+          requires: [cloudfront-update]
 
 
      
