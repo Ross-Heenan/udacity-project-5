@@ -119,7 +119,7 @@ jobs:
       - run:
           name: Cloudfront Smoke Test
           command: |
-            if curl d3539l7xauj1xh.cloudfront.net | grep "title"
+            if curl d219052yg0po4l.cloudfront.net | grep "title"
             then
                 return 0
             else
