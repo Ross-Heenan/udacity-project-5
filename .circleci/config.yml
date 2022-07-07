@@ -122,7 +122,7 @@ jobs:
           name: Cloudfront Smoke Test
           command: |
             export  PAGE_TITLE=$(curl -s d3539l7xauj1xh.cloudfront.net | grep "title")
-            if "${ PAGE_TITLE}" | grep "<title>Welcome to nginx!</title>"
+            if "${PAGE_TITLE}" | grep "<title>Welcome to nginx!</title>"
             then
                 return 0
             else
