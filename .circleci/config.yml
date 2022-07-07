@@ -89,13 +89,11 @@ jobs:
           command: |
             export ELB_DNS=$(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName')
             echo "${ELB_DNS}"
-            export PAGE_TITLE=$(curl -s ${ELB_DNS} | grep "title")
-            echo "${PAGE_TITLE}"
-            if "${PAGE_TITLE}" | grep "<title>Welcome to nginx!</title>"
+            if curl -s ${ELB_DNS} | grep "Welcome"
             then
-                return 0
+              return 0
             else
-                return 1
+              return 1
             fi
   
   update-cloudfront:
