@@ -63,7 +63,7 @@ jobs:
           command: |
             eksctl create cluster \
             --zones us-east-1a,us-east-1b,us-east-1c,us-east-1d,us-east-1f \
-            --name udacityCapstone
+            --name udacityCapstone2
             export KUBECONFIG=~/.kube/config
       - run:
           name: Create EKS Deployment
@@ -87,11 +87,9 @@ jobs:
       - run:
           name: Smoke Test
           command: |
-            export DNS=$(aws elb describe-load-balancers --query 'LoadBalancers[*].DNSName')
+            export DNS=$(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName')
             echo ${DNS}
-            export URL="http://${DNS}:80"        
-            echo ${URL} 
-            if curl -s ${URL} | grep "Hello World - my name is Ross"
+            if curl -s ${DNS} | grep "Welcome to nginx!"
             then
                 return 0
             else
