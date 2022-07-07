@@ -132,12 +132,11 @@ jobs:
             else
                 return 1
             fi
-          
+
 workflows:
   default:
     jobs:
-      - smoke-test:
-          requires: [build-image]
+      - smoke-test
       - cloudfront-update:
           type: approval
           requires: [smoke-test]
