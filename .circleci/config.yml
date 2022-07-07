@@ -83,15 +83,16 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update curl
+            apk add bash
             pip3 install awscli
       - run:
           name: Smoke Test
           command: |
-            bash ELB_DNS = $(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName')
-            bash export ELB_DNS
+            ELB_DNS = $(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName')
+            export ELB_DNS
             echo "${ELB_DNS}"
-            bash TITLE = $(curl -s ${DNS} | grep "title")
-            bash export TITLE
+            TITLE = $(curl -s ${DNS} | grep "title")
+            export TITLE
             echo "${TITLE}"
             if "${TITLE}" | grep "<title>Welcome to nginx!</title>"
             then
@@ -119,6 +120,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update curl
+            apk add bash
             pip install awscli
       - run:
           name: Cloudfront Smoke Test
