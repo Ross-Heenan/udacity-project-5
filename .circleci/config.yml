@@ -63,18 +63,39 @@ jobs:
           command: |
             eksctl create cluster \
             --zones us-east-1a,us-east-1b,us-east-1c,us-east-1d,us-east-1f \
-            --name udacityCapstoneLast
+            --name udacityCapstoneWithTest
             export KUBECONFIG=~/.kube/config
       - run:
           name: Create EKS Deployment
           command: |
             kubectl apply -f kubeDeploy.yml
       - run:
-          wname: Create EKS Service
+          name: Create EKS Service
           command: |
             kubectl apply -f kubeService.yml
-            kubectl get service/nginx-service-loadbalancer |  awk {'print $1" " $2 " " $4 " " $5'} | column -t
 
+  smoke-test:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update curl
+            pip3 install awscli
+        - run:
+          name: Smoke Test
+            export DNS=$(aws elb describe-load-balancers --query 'LoadBalancers[*].DNSName' --output text)
+            echo ${DNS}
+            export URL="http://${DNS}}:80"        
+            echo ${URL} 
+            if curl -s ${URL} | grep "Hello World - my name is Ross"
+            then
+                return 0
+            else
+                return 1
+            fi
           
 workflows:
   default:
@@ -87,6 +108,8 @@ workflows:
           requires: [test-microservice]
       - create-and-deploy:
           requires: [build-image]
+      - smoke-test:
+          requires: [create-and-deploy]
 
 
      

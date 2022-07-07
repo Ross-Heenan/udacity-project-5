@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:1.14.2
+        image: 478288121115.dkr.ecr.us-east-1.amazonaws.com/microservice-udacity-5:latest
         ports:
         - containerPort: 80    
