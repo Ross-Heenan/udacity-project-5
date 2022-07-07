@@ -87,10 +87,11 @@ jobs:
       - run:
           name: Smoke Test
           command: |
-            export DNS = $(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName')
-            echo ${DNS}
-            export TITLE = curl -s ${DNS} | grep "title"
-            if ${TITLE} | grep "<title>Welcome to nginx!</title>"
+            export ELB_DNS = $(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName')
+            echo "${ELB_DNS}"
+            export TITLE = $(curl -s ${DNS} | grep "title")
+            echo "${TITLE}"
+            if "${TITLE}" | grep "<title>Welcome to nginx!</title>"
             then
                 return 0
             else
@@ -105,7 +106,7 @@ jobs:
       - run:
           name: Updated Cloudfront for Green
           command: |
-            echo "update cloudfront distribution with the green loadbalancer before approving this job"
+            echo "updated cloudfront distribution manually"
 
   cloudfront-smoke-test:
     docker:
@@ -120,8 +121,8 @@ jobs:
       - run:
           name: Cloudfront Smoke Test
           command: |
-            export TITLE = curl -s d3539l7xauj1xh.cloudfront.net | grep "title"
-            if ${TITLE} | grep "<title>Welcome to nginx!</title>"
+            export TITLE = $(curl -s d3539l7xauj1xh.cloudfront.net | grep "title")
+            if "${TITLE}" | grep "<title>Welcome to nginx!</title>"
             then
                 return 0
             else
@@ -137,8 +138,6 @@ workflows:
               only: [main]
       - build-image:
           requires: [test-microservice]
-      - create-and-deploy:
-          requires: [build-image]
       - smoke-test:
           requires: [create-and-deploy]
       - cloudfront-update:
