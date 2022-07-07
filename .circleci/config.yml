@@ -87,11 +87,11 @@ jobs:
       - run:
           name: Smoke Test
           command: |
-            ELB_DNS = $(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName')
-            export ELB_DNS
+            bash ELB_DNS = $(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName')
+            bash export ELB_DNS
             echo "${ELB_DNS}"
-            TITLE = $(curl -s ${DNS} | grep "title")
-            export TITLE
+            bash TITLE = $(curl -s ${DNS} | grep "title")
+            bash export TITLE
             echo "${TITLE}"
             if "${TITLE}" | grep "<title>Welcome to nginx!</title>"
             then
