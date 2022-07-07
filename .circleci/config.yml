@@ -89,7 +89,7 @@ jobs:
           command: |
             export ELB_DNS=$(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName')
             echo "${ELB_DNS}"
-            if curl -s ${ELB_DNS} | grep "title"
+            if curl "${ELB_DNS}"" | grep "title"
             then
               return 0
             else
