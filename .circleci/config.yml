@@ -89,7 +89,7 @@ jobs:
             export ELB_DNS=$(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName')
             export DNS=$(echo ${ELB_DNS} | tr -d '"')
             echo "DNS"
-            if curl ${DNS} | grep "title""
+            if curl ${DNS} | grep "title"
             then
               return 0
             else
@@ -135,8 +135,6 @@ workflows:
              only: [main]
       - build-image:
           requires: [test-microservice]
-      - create-and-deploy:
-          requires: [build-image]
       - smoke-test:
           requires: [create-and-deploy]
       - cloudfront-update:
