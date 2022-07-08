@@ -136,7 +136,7 @@ workflows:
       - build-image:
           requires: [test-microservice]
       - smoke-test:
-          requires: [build-scone]
+          requires: [build-image]
       - cloudfront-update:
           type: approval
           requires: [smoke-test]
