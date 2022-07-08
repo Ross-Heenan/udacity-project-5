@@ -1,11 +1,11 @@
 kind: Service 
 apiVersion: v1 
 metadata:
-  name: nginx-green-loadbalancer
+  name: flask-green-loadbalancer
 spec:
   type: LoadBalancer
   selector:
-    app: nginxgreen
+    app: flaskgreen
   ports:
     - protocol: TCP
       port: 80

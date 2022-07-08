@@ -90,7 +90,7 @@ jobs:
             export ELB_DNS=$(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName')
             export DNS=$(echo ${ELB_DNS} | tr -d '"')
             echo "DNS"
-            if curl ${DNS} | grep "title"
+            if curl ${DNS} | grep "Ross"
             then
               return 0
             else
@@ -120,7 +120,7 @@ jobs:
       - run:
           name: Cloudfront Smoke Test
           command: |
-            if curl d219052yg0po4l.cloudfront.net | grep "title"
+            if curl d219052yg0po4l.cloudfront.net | grep "Ross"
             then
                 return 0
             else
