@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-green-deployment
+  name: flask-green-deployment
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: nginxgreen
+      app: flaskgreen
 
   template: 
     metadata:
       labels: 
-        app: nginxgreen   
+        app: flaskgreen   
     spec:
       containers:
-      - name: nginxgreen
-        image: nginx
+      - name: flaskgreen
+        image: rexcode11/udacity5:latest
         ports:
-        - containerPort: 80  
+        - containerPort: 5000  

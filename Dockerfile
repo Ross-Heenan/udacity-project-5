@@ -6,7 +6,6 @@ COPY microservice.py /app
 
 RUN pip install flask
 
-EXPOSE 8080
+EXPOSE 5000
 
-CMD ["python", "./app/microservice.py"]
-
+ENTRYPOINT ["python", "./app/microservice.py"]
