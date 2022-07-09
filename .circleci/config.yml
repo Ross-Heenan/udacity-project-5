@@ -17,7 +17,7 @@ jobs:
       - run:
           name: Linting Flask Microservice
           command: |
-            pylint microservice.py
+            pylint main.py
       - save_cache:
           paths: [cache/test-microservice]
           key: test-microservice
