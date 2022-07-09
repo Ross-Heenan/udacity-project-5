@@ -1,11 +1,5 @@
-FROM python:3.8-slim
+FROM tiangolo/uwsgi-nginx-flask:python3.8
 
 WORKDIR /app
 
-COPY microservice.py /app
-
-RUN pip install flask
-
-EXPOSE 5000
-
-ENTRYPOINT ["python", "./app/microservice.py"]
+COPY main.py /app
